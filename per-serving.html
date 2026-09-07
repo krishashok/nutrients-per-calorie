@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Masala Body Per Serving</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+</head>
+<body>
+<style>
+  :root{
+    --ink:#16130F;
+    --paper:#F3E9D2;
+    --paper-deep:#EADDBF;
+    --turmeric:#E8A317;
+    --chilli:#C4341C;
+    --cardamom:#5C7A38;
+    --smoke:#7C7266;
+    --rule:rgba(22,19,15,.18);
+    --rule-soft:rgba(22,19,15,.10);
+    --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --sans:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+    --display:"Archivo Black","Arial Black",Impact,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{color-scheme:light}
+  body{background:#0B0A09;color:var(--ink);font-family:var(--sans);padding:24px;min-height:100vh}
+  @media (max-width:640px){body{padding:0}}
+
+  .page{
+    max-width:1180px;margin:0 auto;background:var(--paper);position:relative;overflow:hidden;
+    padding:56px 60px 64px;
+  }
+  .page::after{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+    background-image:radial-gradient(var(--ink) 0.9px,transparent 0.9px);
+    background-size:7px 7px;opacity:.055;
+  }
+  .page > *{position:relative;z-index:1}
+  @media (max-width:760px){.page{padding:36px 22px 48px}}
+
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:38px}
+  .brand-mark{width:16px;height:16px;background:var(--chilli);border-radius:50%}
+  .brand-name{font-family:var(--mono);font-weight:600;font-size:16px;letter-spacing:.34em;text-transform:uppercase}
+  .brand-tag{margin-left:auto;font-family:var(--mono);font-size:13px;color:var(--smoke);letter-spacing:.06em;text-transform:uppercase}
+  @media (max-width:640px){.brand-tag{display:none}}
+
+  h1{font-family:var(--display);font-size:clamp(48px,7.6vw,92px);line-height:.92;letter-spacing:-.025em;text-transform:uppercase;text-wrap:balance}
+  h1 em{font-style:normal;color:var(--chilli)}
+  .sub{font-family:var(--mono);font-size:17px;color:var(--smoke);margin-top:20px;letter-spacing:.03em;max-width:62ch;line-height:1.5}
+  .sub b{color:var(--ink);font-weight:500}
+  .rule{height:5px;background:var(--ink);margin:36px 0 0}
+
+  /* category chips */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;padding:22px 0 18px;border-bottom:2px solid var(--rule)}
+  .chip{
+    appearance:none;border:2px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;
+    font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;
+    padding:8px 14px;border-radius:999px;display:inline-flex;align-items:center;gap:8px;line-height:1;
+    transition:background .15s,color .15s,transform .15s;
+  }
+  .chip:hover{background:var(--paper-deep)}
+  .chip:focus-visible{outline:3px solid var(--turmeric);outline-offset:2px}
+  .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .chip .sw{width:9px;height:9px;flex:none}
+  .chip .sw.plant{background:var(--cardamom);border-radius:50%}
+  .chip .sw.animal{background:var(--chilli);border-radius:2px}
+  .chip .sw.mix{background:linear-gradient(90deg,var(--cardamom) 50%,var(--chilli) 50%);border-radius:2px}
+  .chip.win{border-color:var(--turmeric);color:var(--ink)}
+  .chip.win .sw{background:var(--turmeric);border-radius:50%;box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--turmeric)}
+  .chip.win[aria-pressed="true"]{background:var(--turmeric);color:var(--ink)}
+
+  /* main grid */
+  .main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:40px;padding-top:28px;align-items:start}
+  @media (max-width:900px){.main{grid-template-columns:1fr;gap:28px}}
+
+  .chart-wrap{position:relative}
+  .chart-wrap svg{width:100%;height:auto;display:block;overflow:visible}
+  .tip{
+    position:absolute;pointer-events:none;z-index:5;opacity:0;transition:opacity .12s;
+    background:var(--ink);color:var(--paper);padding:10px 12px;min-width:170px;max-width:240px;
+    font-family:var(--mono);font-size:12px;line-height:1.5;letter-spacing:.02em;
+    transform:translate(-50%,calc(-100% - 14px));
+  }
+  .tip.on{opacity:1}
+  .tip .n{font-family:var(--display);font-size:15px;line-height:1.1;margin-bottom:6px;letter-spacing:-.01em}
+  .tip .c{color:rgba(243,233,210,.6);text-transform:uppercase;font-size:10px;letter-spacing:.14em;margin-bottom:4px}
+  .tip .r{display:flex;justify-content:space-between;gap:14px}
+  .tip .r b{font-weight:600;font-variant-numeric:tabular-nums}
+
+  .legend{display:flex;flex-wrap:wrap;gap:18px 26px;margin-top:14px;padding-top:14px;border-top:2px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--smoke);letter-spacing:.03em}
+  .legend .it{display:flex;align-items:center;gap:8px}
+  .legend .it i{display:inline-block;flex:none}
+  .legend .dot{width:12px;height:12px;border-radius:50%;background:var(--cardamom)}
+  .legend .sq{width:12px;height:12px;border-radius:2px;background:var(--chilli)}
+  .legend .ring{width:14px;height:14px;border-radius:50%;border:3px solid var(--turmeric)}
+  .legend .sz{display:inline-flex;align-items:center;gap:3px}
+  .legend .sz i{border-radius:50%;background:var(--smoke)}
+  .legend .sz i:nth-child(1){width:6px;height:6px}
+  .legend .sz i:nth-child(2){width:10px;height:10px}
+  .legend .sz i:nth-child(3){width:15px;height:15px}
+
+  /* side panel */
+  .panel{border-top:5px solid var(--ink);padding-top:14px}
+  .panel .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--smoke)}
+  .panel h2{font-family:var(--display);font-size:34px;line-height:1;letter-spacing:-.02em;margin-top:8px;text-wrap:balance}
+  .panel .tag{font-family:var(--display);font-size:17px;line-height:1.2;color:var(--chilli);margin-top:10px}
+  .panel .blurb{font-size:15px;line-height:1.5;margin-top:10px;color:var(--ink);max-width:40ch}
+  .panel .blurb em{font-style:italic}
+  .list{margin-top:18px;border-top:2px solid var(--rule)}
+  .list .hd{display:grid;grid-template-columns:1fr 52px 52px;gap:10px;padding:8px 0 6px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--smoke)}
+  .list .hd span:not(:first-child){text-align:right}
+  .row{
+    display:grid;grid-template-columns:1fr 52px 52px;gap:10px;align-items:center;padding:9px 0;
+    border-top:1px solid var(--rule-soft);cursor:default;font-variant-numeric:tabular-nums;
+    transition:background .12s;
+  }
+  .row:hover,.row.hot{background:var(--paper-deep)}
+  .row .nm{display:flex;align-items:center;gap:9px;min-width:0;flex-wrap:wrap}
+  .row .nm i{flex:none;width:9px;height:9px}
+  .row .nm i.plant{background:var(--cardamom);border-radius:50%}
+  .row .nm i.animal{background:var(--chilli);border-radius:2px}
+  .row .nm span{font-size:14px;font-weight:500;line-height:1.2}
+  .row .nm small{font-family:var(--mono);font-size:10px;color:var(--smoke);letter-spacing:.06em;text-transform:uppercase;flex:none}
+  .row .bar{position:relative;height:18px;display:flex;align-items:center;justify-content:flex-end}
+  .row .bar b{position:absolute;left:0;top:7px;height:4px;background:var(--ink);opacity:.18;border-radius:2px}
+  .row .v{font-family:var(--mono);font-size:13px;font-weight:600;text-align:right}
+  .row .p{font-family:var(--mono);font-size:13px;color:var(--smoke);text-align:right}
+  .list .ft{font-family:var(--mono);font-size:11px;color:var(--smoke);padding-top:10px;letter-spacing:.03em;line-height:1.5}
+
+  /* notes */
+  .notes{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:44px;border-top:5px solid var(--ink)}
+  .note{padding:22px 26px 26px 0;border-right:2px solid var(--rule)}
+  .note + .note{padding-left:26px}
+  .note:last-child{border-right:none;padding-right:0}
+  .note .k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--smoke)}
+  .note h3{font-family:var(--display);font-size:22px;line-height:1.05;letter-spacing:-.015em;margin-top:8px}
+  .note h3 em{font-style:normal;color:var(--chilli)}
+  .note p{font-size:14.5px;line-height:1.55;margin-top:10px}
+  .note .nut{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+  .note .nut span{font-family:var(--mono);font-size:11px;letter-spacing:.04em;border:1.5px solid var(--ink);padding:3px 7px;border-radius:999px}
+  @media (max-width:900px){
+    .notes{grid-template-columns:1fr}
+    .note{border-right:none;border-bottom:2px solid var(--rule);padding:20px 0}
+    .note + .note{padding-left:0}
+    .note:last-child{border-bottom:none}
+  }
+
+  .verdict{margin-top:40px;background:var(--ink);color:var(--paper);padding:34px 40px;display:flex;gap:40px;align-items:center;flex-wrap:wrap}
+  .verdict .k{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.7}
+  .verdict .v{font-family:var(--display);font-size:clamp(26px,3.4vw,40px);line-height:1.05;letter-spacing:-.02em;margin-top:10px;max-width:22ch;text-wrap:balance}
+  .verdict .v em{font-style:normal;color:var(--turmeric)}
+  .verdict p{font-size:15px;line-height:1.55;opacity:.85;max-width:40ch;flex:1 1 300px}
+  .verdict > div:first-child{flex:1 1 380px}
+
+  footer{margin-top:28px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--smoke);letter-spacing:.04em;line-height:1.5}
+
+  /* svg text */
+  .ax{font-family:var(--mono);font-size:11px;fill:var(--smoke)}
+  .axt{font-family:var(--mono);font-size:11.5px;font-weight:500;fill:var(--ink);letter-spacing:.14em;text-transform:uppercase}
+  .lbl{font-family:var(--sans);font-size:12.5px;font-style:italic;font-weight:500;fill:var(--ink);paint-order:stroke;stroke:var(--paper);stroke-width:3px;stroke-linejoin:round}
+  .lbl.win{font-family:var(--display);font-style:normal;font-size:14px}
+  .pt{cursor:pointer}
+  .pt,.lb,.ring{transition:opacity .35s}
+  .lb,.lb *{pointer-events:none}
+  .pt.hot .mk{stroke:var(--ink);stroke-width:2.5}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition:none!important;animation:none!important}
+  }
+  .variant{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;border:2px solid var(--ink);padding:5px 10px;margin-bottom:18px}
+  .tip .r.dim{opacity:.6}
+</style>
+
+<div class="page">
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div class="brand-name">Masala Body</div>
+    <div class="brand-tag">Nutrient score, per serving</div>
+  </div>
+
+  <div class="variant">Variant B &middot; per practical serving</div>
+  <h1>Nutrients<br>per <em>serving</em></h1>
+  <p class="sub">Same ten nutrients, but counted in the amount you would actually eat: a katori of dal, two eggs, a piece of fish. <b>100 = one serving of mathi.</b> Higher and further right is better, and the dot size no longer has to do any work.</p>
+
+  <div class="rule"></div>
+
+  <div class="chips" id="chips" role="group" aria-label="Food categories"></div>
+
+  <div class="main">
+    <div>
+      <div class="chart-wrap" id="cv">
+        <div class="tip" id="tip" role="status" aria-live="polite"></div>
+      </div>
+      <div class="legend">
+        <div class="it"><i class="dot"></i> Plant</div>
+        <div class="it"><i class="sq"></i> Animal</div>
+        <div class="it"><i class="ring"></i> The winners</div>
+        <div class="it">Hover a mark for the serving size</div>
+      </div>
+    </div>
+
+    <aside class="panel" id="panel"></aside>
+  </div>
+
+  <div class="notes">
+    <div class="note">
+      <div class="k">The method</div>
+      <h3>The 100 kcal score, <em>scaled to the plate</em></h3>
+      <p>Each food's per-100 kcal score is multiplied by the calories in a practical serving, then the whole chart is rescaled so the best serving, a piece of mathi, reads 100. Protein is counted the same way, in grams per serving.</p>
+    </div>
+    <div class="note">
+      <div class="k">The catch</div>
+      <h3>Leafy greens are <em>underrated here</em></h3>
+      <p>Palak and amaranth hit the cap on several nutrients at 100 kcal, so their true per-100 kcal score is higher than 330. Scaling a capped number down to a 25 kcal serving shortchanges them. Treat their dots as a floor, not a verdict.</p>
+    </div>
+    <div class="note">
+      <div class="k">What moves</div>
+      <h3>Fish, goat and eggs <em>climb the chart</em></h3>
+      <p>Per serving, mathi, bangda and lean goat lead, chicken liver and eggs follow, and the greens fall back into the pack with the dals. Chicken thigh and breast swing far right on protein, but stay low on everything else.</p>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div>
+      <div class="k">Eat like a human</div>
+      <div class="v">The leaderboard <em>changes</em> when the portion is real.</div>
+    </div>
+    <p>Small oily fish and eggs are the practical stars. Palak is still superb per calorie. You just cannot eat half a kilo of it, and this chart stops pretending you can.</p>
+  </div>
+
+  <footer>
+    <div>Serving sizes are typical Indian portions, in kcal on hover. Per-100 kcal scores from the companion chart.</div>
+    <div>Values are approximate, cooked-weight typical Indian preparations.</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var W=680,H=580,ml=54,mr=26,mt=34,mb=52;
+  var pw=W-ml-mr,ph=H-mt-mb,xmax=42,ymax=100;
+  var css=getComputedStyle(document.documentElement);
+  var PLANT=css.getPropertyValue('--cardamom').trim()||'#5C7A38';
+  var ANIMAL=css.getPropertyValue('--chilli').trim()||'#C4341C';
+  var GOLD=css.getPropertyValue('--turmeric').trim()||'#E8A317';
+  function X(x){return ml+x*pw/xmax;}
+  function Y(y){return mt+(ymax-y)*ph/ymax;}
+  var RR=7;
+
+  var CATS=[
+    {id:'all',name:'Everything',tag:'The whole Indian kitchen, plated',kind:'mix',
+     blurb:'Forty-nine common ingredients, scored by what one realistic serving delivers. Hover any mark, or pick a category to read the labels.'},
+    {id:0,name:'Staples',tag:'A full plate of calories',kind:'plant',
+     blurb:'A plate of rice is 210 kcal and still scores under 10. Millets do better, but the whole category stays in the bottom left. Its job is calories.'},
+    {id:1,name:'Dals & legumes',tag:'A katori each',kind:'plant',
+     blurb:'One katori of any dal lands between 20 and 32 with 6 to 8 g of protein. Soya chunks lead the plants outright: 39 and nearly 13 g of protein from an 85 kcal serving.'},
+    {id:2,name:'Nuts & seeds',tag:'Small handfuls',kind:'plant',
+     blurb:'A handful of peanuts is 170 kcal, which buys a respectable 20 and 8 g of protein. Til and flax are eaten by the spoon, so they barely register per serving.'},
+    {id:3,name:'Dairy & ghee',tag:'Ghee still scores nothing',kind:'animal',
+     blurb:'A glass of milk and a portion of paneer both land in the low twenties. Low-fat paneer keeps the protein and sheds the calories. Ghee is a tablespoon of 1.7.'},
+    {id:4,name:'Vegetables',tag:'The century-makers come back to earth',kind:'plant',
+     blurb:'Bhindi scored 166 per 100 kcal. A 33 kcal serving of it scores 20. Vegetables are still worth eating, but per plate they sit alongside the dals, not above them.'},
+    {id:5,name:'Fruits',tag:'Guava, mango and a few amla',kind:'plant',
+     blurb:'A whole mango and a guava both reach 22 per serving. Amla is eaten one or two at a time, 15 kcal, so its excellent per-calorie score shrinks to 5.'},
+    {id:6,name:'Eggs & meat',tag:'Two eggs is a very good deal',kind:'animal',
+     blurb:'Lean goat scores 74 with 30 g of protein. Two eggs score 57 with 15 g. Chicken thigh and breast are the far-right specialists: 37 to 40 g of protein, and not much else.'},
+    {id:7,name:'Fish',tag:'Mathi sets the scale',kind:'animal',
+     blurb:'A 120 kcal piece of mathi is the best serving on the chart, so it defines 100. Bangda scores 76. Nethili is eaten in small portions, which pulls it down to 46.'},
+    {id:8,name:'Organ meats',tag:'A 60 kcal portion, 65 points',kind:'animal',
+     blurb:'Chicken liver scores 65 and goat liver 60 from a small 60 kcal portion. Nothing else delivers this much from this few calories.'},
+    {id:9,name:'Leafy greens',tag:'Back into the pack',kind:'plant',
+     blurb:'A katori of cooked palak is 25 kcal and scores 31. Amaranth 35. Still good, and underrated here because their per-100 kcal scores are capped. But no longer off the top of the chart.'},
+    {id:'win',name:'The winners',tag:'Mathi and soya chunks',kind:'win',
+     blurb:'One animal, one plant. Mathi is the best serving on the chart by a distance. Soya chunks are the best plant serving, ahead of every green and every dal.'}
+  ];
+  var CATNAME={};CATS.forEach(function(c){if(typeof c.id==='number')CATNAME[c.id]=c.name;});
+
+  // name, protein g/100kcal, score/100kcal, animal?, kcal per serving, category, label placement (in serving coordinates)
+  var B=[
+    ["White rice",2.2,12,0,210,0,["r"]],
+    ["Whole wheat atta",3.8,26,0,205,0,["r"]],
+    ["Bajra",3.3,40,0,180,0,["r"]],
+    ["Ragi",2.0,42,0,165,0,["l"]],
+    ["Toor dal",6.0,55,0,100,1,["L",15,16]],
+    ["Urad dal",6.9,62,0,105,1,["L",15,20]],
+    ["Masoor dal",7.8,68,0,105,1,["L",15,24]],
+    ["Chana",5.2,74,0,110,1,["L",15,28]],
+    ["Moong dal",7.3,78,0,105,1,["L",15,32]],
+    ["Rajma",6.8,86,0,100,1,["L",15,36]],
+    ["Soya chunks",15,125,0,85,1,["t"]],
+    ["Coconut",1.0,20,0,70,2,["r"]],
+    ["Peanuts",4.8,32,0,170,2,["r"]],
+    ["Til (sesame)",2.8,50,0,57,2,["L",5,9]],
+    ["Flax seeds",3.4,60,0,53,2,["L",5,14]],
+    ["Ghee",0.3,4,1,115,3,["r"]],
+    ["Paneer",6.6,40,1,150,3,["L",13.5,27]],
+    ["Whole milk",4.6,48,1,130,3,["l"]],
+    ["Curd",5.0,64,1,60,3,["r"]],
+    ["Low-fat paneer",13,68,1,85,3,["r"]],
+    ["Tomato",4.5,134,0,20,4,["L",6,8.5]],
+    ["Cabbage",6.4,144,0,20,4,["L",6,12]],
+    ["Cauliflower",8,156,0,30,4,["L",6,22.5]],
+    ["Bhindi",6.2,166,0,33,4,["L",6,26]],
+    ["Karela",5,182,0,20,4,["L",6,15.5]],
+    ["Green peas",7.8,108,0,40,4,["L",6,19]],
+    ["Mushroom",9.2,90,0,25,4,["L",6,5]],
+    ["Amla",1.7,95,0,15,5,["L",5,4]],
+    ["Guava",3.6,88,0,68,5,["L",5,26]],
+    ["Muskmelon",2.5,78,0,60,5,["L",5,17]],
+    ["Mango",1.4,60,0,100,5,["L",5,21.5]],
+    ["Banana",1.2,42,0,105,5,["L",5,12.5]],
+    ["Watermelon",2.4,34,0,50,5,["L",5,8]],
+    ["Eggs",10,100,1,155,6,["t"]],
+    ["Goat (lean)",21,138,1,145,6,["r"]],
+    ["Prawns",21.5,118,1,80,6,["r"]],
+    ["Chicken breast",22.5,30,1,165,6,["l"]],
+    ["Chicken thigh",20,35,1,200,6,["l"]],
+    ["Mathi (sardine)",18,225,1,120,7,["r"]],
+    ["Nethili (anchovy)",16.5,208,1,60,7,["l"]],
+    ["Bangda (mackerel)",14,158,1,130,7,["r"]],
+    ["Rohu",17.5,122,1,100,7,["t"]],
+    ["Pomfret",15.2,105,1,110,7,["b"]],
+    ["Chicken liver",15.5,292,1,60,8,["r"]],
+    ["Goat liver",14.8,270,1,60,8,["l"]],
+    ["Curry leaves",6.2,246,0,3,9,["r"]],
+    ["Methi leaves",9,270,0,25,9,["L",6,27]],
+    ["Moringa leaves",9.5,300,0,20,9,["L",6,22]],
+    ["Amaranth leaves",12,312,0,30,9,["r"]],
+    ["Palak",16,330,0,25,9,["r"]]
+  ];
+  var MAXRAW=0;
+  B.forEach(function(b){MAXRAW=Math.max(MAXRAW,b[2]*b[4]/100);});
+  // P: name, protein g/serving, serving score 0-100, animal?, kcal/serving, category, placement, score/100kcal
+  var P=B.map(function(b){
+    return [b[0],Math.round(b[1]*b[4]/10)/10,Math.round(b[2]*b[4]/100/MAXRAW*1000)/10,b[3],b[4],b[5],b[6],b[2]];
+  });
+  var WIN={"Mathi (sardine)":1,"Soya chunks":1};
+
+  /* ---------- chart ---------- */
+  var s='<svg id="sv" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Nutrient score per serving versus grams of protein per serving for common Indian foods">';
+  [20,40,60,80,100].forEach(function(v){
+    s+='<line x1="'+ml+'" y1="'+Y(v)+'" x2="'+(W-mr)+'" y2="'+Y(v)+'" stroke="rgba(22,19,15,.13)" stroke-width="1"/>';
+    s+='<text class="ax" x="'+(ml-10)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+v+'</text>';
+  });
+  [0,10,20,30,40].forEach(function(v){
+    if(v)s+='<line x1="'+X(v)+'" y1="'+mt+'" x2="'+X(v)+'" y2="'+(H-mb)+'" stroke="rgba(22,19,15,.08)" stroke-width="1"/>';
+    s+='<text class="ax" x="'+X(v)+'" y="'+(H-mb+18)+'" text-anchor="middle">'+v+'</text>';
+  });
+  s+='<line x1="'+ml+'" y1="'+mt+'" x2="'+ml+'" y2="'+(H-mb)+'" stroke="#16130F" stroke-width="2"/>';
+  s+='<line x1="'+ml+'" y1="'+(H-mb)+'" x2="'+(W-mr)+'" y2="'+(H-mb)+'" stroke="#16130F" stroke-width="2"/>';
+  s+='<text class="axt" x="'+(W-mr)+'" y="'+(H-8)+'" text-anchor="end">Protein, g per serving &#8594;</text>';
+  s+='<text class="axt" x="'+(ml-40)+'" y="'+(mt-16)+'" text-anchor="start">&#8593; Nutrient score per serving (mathi = 100)</text>';
+
+  var marks='',labels='';
+  P.forEach(function(p,i){
+    var cx=X(p[1]),cy=Y(p[2]),c=p[3]?ANIMAL:PLANT,r=RR;
+    var g='<g class="pt" id="pt'+i+'" data-i="'+i+'" tabindex="0" role="img" aria-label="'+p[0]+', serving score '+p[2]+', '+p[1]+' g protein per serving">';
+    if(WIN[p[0]])g+='<circle class="ring" id="ring'+i+'" cx="'+cx+'" cy="'+cy+'" r="'+(r+7)+'" fill="none" stroke="'+GOLD+'" stroke-width="3.5" style="opacity:0"/>';
+    if(p[3]){var sd=r*1.77;g+='<rect class="mk" x="'+(cx-sd/2)+'" y="'+(cy-sd/2)+'" width="'+sd+'" height="'+sd+'" rx="2.5" fill="'+c+'" stroke="#F3E9D2" stroke-width="1.5"/>';}
+    else{g+='<circle class="mk" cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+c+'" stroke="#F3E9D2" stroke-width="1.5"/>';}
+    g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(r+5)+'" fill="transparent" stroke="none"/>';
+    g+='</g>';
+    marks+=g;
+    var L=p[6],lx,ly,an,lead='';
+    if(L[0]==='L'){lx=X(L[1]);ly=Y(L[2])+4;an='start';
+      lead='<line x1="'+(cx+r+2)+'" y1="'+cy+'" x2="'+(lx-5)+'" y2="'+(ly-4)+'" stroke="rgba(22,19,15,.45)" stroke-width="1"/>';}
+    else if(L[0]==='r'){lx=cx+r+7;ly=cy+4;an='start';}
+    else if(L[0]==='l'){lx=cx-r-7;ly=cy+4;an='end';}
+    else if(L[0]==='t'){lx=cx;ly=cy-r-8;an='middle';}
+    else{lx=cx;ly=cy+r+14;an='middle';}
+    labels+='<g class="lb" id="lb'+i+'" style="opacity:0">'+lead+'<text class="lbl'+(WIN[p[0]]?' win':'')+'" x="'+lx+'" y="'+ly+'" text-anchor="'+an+'">'+p[0]+'</text></g>';
+  });
+  s+=marks+labels+'</svg>';
+  var cv=document.getElementById('cv');
+  cv.insertAdjacentHTML('afterbegin',s);
+
+  /* ---------- chips ---------- */
+  var chips=document.getElementById('chips');
+  CATS.forEach(function(c){
+    var b=document.createElement('button');
+    b.className='chip'+(c.kind==='win'?' win':'');
+    b.type='button';b.dataset.id=String(c.id);b.setAttribute('aria-pressed','false');
+    b.innerHTML='<i class="sw '+c.kind+'"></i>'+c.name;
+    b.addEventListener('click',function(){setCat(c.id);});
+    chips.appendChild(b);
+  });
+
+  /* ---------- state ---------- */
+  var cur='all';
+  var panel=document.getElementById('panel');
+  function inSel(p){
+    if(cur==='all')return true;
+    if(cur==='win')return !!WIN[p[0]];
+    return p[5]===cur;
+  }
+  function setCat(id){
+    cur=id;
+    chips.querySelectorAll('.chip').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.id===String(id)));});
+    P.forEach(function(p,i){
+      var pt=document.getElementById('pt'+i),lb=document.getElementById('lb'+i),rg=document.getElementById('ring'+i);
+      var on=inSel(p);
+      if(cur==='all'){pt.style.opacity=0.92;lb.style.opacity=WIN[p[0]]?1:0;if(rg)rg.style.opacity=1;}
+      else if(cur==='win'){pt.style.opacity=on?1:0.14;lb.style.opacity=on?1:0;if(rg)rg.style.opacity=1;}
+      else{pt.style.opacity=on?1:0.14;lb.style.opacity=on?1:0;if(rg)rg.style.opacity=0;}
+    });
+    renderPanel();
+    try{localStorage.setItem('mb-serving-cat',String(id));}catch(e){}
+  }
+  function renderPanel(){
+    var c=CATS.filter(function(x){return String(x.id)===String(cur);})[0];
+    var items=P.map(function(p,i){return {p:p,i:i};}).filter(function(o){return inSel(o.p);});
+    items.sort(function(a,b){return b.p[2]-a.p[2];});
+    var ft='';
+    if(cur==='all'){items=items.slice(0,10);ft='Top 10 of 49 by serving score. Pick a category to see the rest.';}
+    var html='<div class="kicker">'+(cur==='all'?'Overview':cur==='win'?'Verdict':'Category')+'</div>';
+    html+='<h2>'+c.name+'</h2><div class="tag">'+c.tag+'</div><p class="blurb">'+c.blurb+'</p>';
+    html+='<div class="list"><div class="hd"><span>'+(cur==='all'?'Top 10 by score':'Food')+'</span><span>Score</span><span>Prot g</span></div>';
+    items.forEach(function(o){
+      var p=o.p;
+      html+='<div class="row" data-i="'+o.i+'"><div class="nm"><i class="'+(p[3]?'animal':'plant')+'"></i><span>'+p[0]+'</span>'+(cur==='all'||cur==='win'?'<small>'+CATNAME[p[5]]+'</small>':'<small>'+p[4]+' kcal</small>')+'</div>';
+      html+='<div class="bar"><b style="width:'+Math.round(p[2])+'%"></b><span class="v">'+Math.round(p[2])+'</span></div><div class="p">'+p[1]+'</div></div>';
+    });
+    html+=(ft?'<div class="ft">'+ft+'</div>':'')+'</div>';
+    panel.innerHTML=html;
+    panel.querySelectorAll('.row').forEach(function(r){
+      var i=+r.dataset.i;
+      r.addEventListener('mouseenter',function(){hot(i,true);});
+      r.addEventListener('mouseleave',function(){hot(i,false);});
+    });
+  }
+  function hot(i,on){
+    var pt=document.getElementById('pt'+i),lb=document.getElementById('lb'+i);
+    pt.classList.toggle('hot',on);
+    if(on){pt.dataset.prev=lb.style.opacity;lb.style.opacity=1;pt.style.opacity=1;}
+    else{lb.style.opacity=pt.dataset.prev||0;pt.style.opacity=(cur==='all'?0.92:(inSel(P[i])?1:0.14));}
+    panel.querySelectorAll('.row').forEach(function(r){r.classList.toggle('hot',on&&+r.dataset.i===i);});
+  }
+
+  /* ---------- tooltip ---------- */
+  var tip=document.getElementById('tip'),sv=document.getElementById('sv');
+  function showTip(i){
+    var p=P[i];
+    tip.innerHTML='<div class="c">'+CATNAME[p[5]]+' · '+(p[3]?'animal':'plant')+'</div><div class="n">'+p[0]+'</div>'+
+      '<div class="r"><span>Serving score</span><b>'+Math.round(p[2])+'</b></div>'+
+      '<div class="r"><span>Protein /serving</span><b>'+p[1]+' g</b></div>'+
+      '<div class="r"><span>Serving</span><b>~'+p[4]+' kcal</b></div>'+
+      '<div class="r dim"><span>Score /100 kcal</span><b>'+p[7]+'</b></div>';
+    var rect=sv.getBoundingClientRect(),k=rect.width/W;
+    var cx=X(p[1])*k,cy=(Y(p[2])-RR)*k;
+    cx=Math.max(100,Math.min(rect.width-100,cx));
+    tip.style.left=cx+'px';tip.style.top=cy+'px';
+    if(cy<120){tip.style.transform='translate(-50%,'+(RR*2*k+16)+'px)';}else{tip.style.transform='';}
+    tip.classList.add('on');
+    hot(i,true);
+  }
+  function hideTip(i){tip.classList.remove('on');hot(i,false);}
+  sv.querySelectorAll('.pt').forEach(function(g){
+    var i=+g.dataset.i;
+    g.addEventListener('mouseenter',function(){showTip(i);});
+    g.addEventListener('mouseleave',function(){hideTip(i);});
+    g.addEventListener('focus',function(){showTip(i);});
+    g.addEventListener('blur',function(){hideTip(i);});
+    g.addEventListener('click',function(){setCat(P[i][5]);showTip(i);});
+  });
+
+  var saved=null;try{saved=localStorage.getItem('mb-serving-cat');}catch(e){}
+  var init='all';
+  if(saved!==null){var n=+saved;if(saved==='win')init='win';else if(!isNaN(n)&&saved!=='')init=n;}
+  setCat(init);
+})();
+</script>
+</body>
+</html>
