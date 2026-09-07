@@ -176,6 +176,7 @@
   .xlink:hover{background:var(--ink);color:var(--paper)}
   .xlink:focus-visible{outline:3px solid var(--turmeric);outline-offset:2px}
   .xlink b{font-weight:600}
+  .xlinks{display:flex;flex-wrap:wrap;gap:10px}
   .pt{transition:opacity .35s,transform .7s cubic-bezier(.4,0,.2,1)}
   .dials{display:grid;grid-template-columns:auto auto 1fr;gap:10px 18px;align-items:center;margin-bottom:14px}
   .dials .k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);display:flex;align-items:center;gap:8px}
@@ -202,7 +203,10 @@
   <div class="variant">Variant B &middot; per practical serving</div>
   <h1>Nutrients<br>per <em>serving</em></h1>
   <p class="sub">Same ten nutrients, but counted in the amount you would actually eat. Two dials set how big the plant and animal portions are. <b>100 = a medium serving of mathi.</b> Higher and further right is better, and the dot size no longer has to do any work.</p>
-  <a class="xlink" href="https://krishashok.github.io/nutrients-per-calorie/">&#8592; Variant A &middot; <b>the original, per 100 kcal</b></a>
+  <div class="xlinks">
+    <a class="xlink" href="https://krishashok.github.io/nutrients-per-calorie/">&#8592; Variant A &middot; <b>per 100 kcal</b></a>
+    <a class="xlink" href="https://krishashok.github.io/nutrients-per-calorie/per-rupee.html">Variant C &middot; <b>per rupee</b> &#8594;</a>
+  </div>
 
   <div class="rule"></div>
 
