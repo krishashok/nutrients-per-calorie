@@ -52,6 +52,10 @@
   .sub{font-family:var(--mono);font-size:17px;color:var(--smoke);margin-top:20px;letter-spacing:.03em;max-width:62ch;line-height:1.5}
   .sub b{color:var(--ink);font-weight:500}
   .rule{height:5px;background:var(--ink);margin:36px 0 0}
+  .xlink{display:inline-flex;align-items:center;gap:10px;margin-top:22px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-decoration:none;border:2px solid var(--ink);padding:9px 14px;transition:background .15s,color .15s}
+  .xlink:hover{background:var(--ink);color:var(--paper)}
+  .xlink:focus-visible{outline:3px solid var(--turmeric);outline-offset:2px}
+  .xlink b{font-weight:600}
 
   /* category chips */
   .chips{display:flex;flex-wrap:wrap;gap:8px;padding:22px 0 18px;border-bottom:2px solid var(--rule)}
@@ -181,6 +185,7 @@
 
   <h1>Nutrients<br>per <em>calorie</em></h1>
   <p class="sub">Take <b>100 kcal</b> of any food. Add up the share of your daily need it covers for ten nutrients. That sum is the <b>nutrient score</b>. Higher and further right is better. Pick a category to see who lives where.</p>
+  <a class="xlink" href="https://krishashok.github.io/nutrients-per-calorie/per-serving.html">Variant B &middot; <b>the same chart per serving</b> &#8594;</a>
 
   <div class="rule"></div>
 
