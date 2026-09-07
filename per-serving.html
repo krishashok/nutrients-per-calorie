@@ -205,8 +205,8 @@
       <div class="modebar">
         <span class="k">Vegetable &amp; greens serving</span>
         <div class="seg" role="group" aria-label="Serving size assumption">
-          <button type="button" id="mA" aria-pressed="true">Small katori</button>
-          <button type="button" id="mB" aria-pressed="false">Realistic katori</button>
+          <button type="button" id="mA" aria-pressed="true">Small serving</button>
+          <button type="button" id="mB" aria-pressed="false">Large serving</button>
         </div>
         <div class="modenote" id="modenote"></div>
       </div>
@@ -232,8 +232,8 @@
     </div>
     <div class="note">
       <div class="k">The switch</div>
-      <h3>Two ideas of <em>a katori</em></h3>
-      <p>Small katori uses the serving sizes that sized the dots on the per-100 kcal chart: roughly 100 g of raw vegetable or greens. Realistic katori uses what a sabzi portion actually holds once cooked down: about 200 g of raw vegetable, 250 g of raw palak or amaranth, 120 g of methi. Meat, fish, dals, dairy and fruit do not change, because those servings were already realistic.</p>
+      <h3>Two sizes of <em>sabzi</em></h3>
+      <p>Small serving uses the sizes that sized the dots on the per-100 kcal chart: roughly 100 g of raw vegetable or greens. Large serving is a generous sabzi portion cooked down: about 200 g of raw vegetable, 250 g of raw palak or amaranth, 120 g of methi. Meat, fish, dals, dairy and fruit do not change.</p>
     </div>
     <div class="note">
       <div class="k">The catch</div>
@@ -245,9 +245,9 @@
   <div class="verdict">
     <div>
       <div class="k">Eat like a human</div>
-      <div class="v">Half the gap is <em>the size of the katori</em>.</div>
+      <div class="v">Half the gap is <em>the size of the serving</em>.</div>
     </div>
-    <p>At a small katori, animal foods own the top of the chart. Give the greens a real portion and palak sits level with lean goat, above eggs and liver. Mathi leads either way. The plate still wants both.</p>
+    <p>At a small serving, animal foods own the top of the chart. Give the greens a large serving and palak sits level with lean goat, above eggs and liver. Mathi leads either way. The plate still wants both.</p>
   </div>
 
   <footer>
@@ -270,8 +270,8 @@
 
   var CATS=[
     {id:'all',name:'Everything',tag:'The whole Indian kitchen, plated',kind:'mix',
-     blurb:['Forty-nine common ingredients, scored by what one realistic serving delivers. Hover any mark, or pick a category to read the labels.',
-            'Same foods, with vegetables and greens at a realistic katori: about 200 g of raw vegetable or 250 g of raw greens, cooked down. Everything else is unchanged.']},
+     blurb:['Forty-nine common ingredients, scored by what one practical serving delivers. Hover any mark, or pick a category to read the labels.',
+            'Same foods, with vegetables and greens at a large serving: about 200 g of raw vegetable or 250 g of raw greens, cooked down. Everything else is unchanged.']},
     {id:0,name:'Staples',tag:'A full plate of calories',kind:'plant',
      blurb:'A plate of rice is 210 kcal and still scores under 10. Millets do better, but the whole category stays in the bottom left. Its job is calories.'},
     {id:1,name:'Dals & legumes',tag:'A katori each',kind:'plant',
@@ -280,9 +280,9 @@
      blurb:'A handful of peanuts is 170 kcal, which buys a respectable 20 and 8 g of protein. Til and flax are eaten by the spoon, so they barely register per serving.'},
     {id:3,name:'Dairy & ghee',tag:'Ghee still scores nothing',kind:'animal',
      blurb:'A glass of milk and a portion of paneer both land in the low twenties. Low-fat paneer keeps the protein and sheds the calories. Ghee is a tablespoon of 1.7.'},
-    {id:4,name:'Vegetables',tag:['The century-makers come back to earth','A proper katori restores half the damage'],kind:'plant',
+    {id:4,name:'Vegetables',tag:['The century-makers come back to earth','A large serving restores half the damage'],kind:'plant',
      blurb:['Bhindi scored 166 per 100 kcal. A 33 kcal serving of it scores 20. Vegetables are still worth eating, but per plate they sit alongside the dals, not above them.',
-            'At a proper katori, 200 g of vegetable cooked down, bhindi climbs to 41 and green peas to 32. Still below the fish, now level with the dals and above chicken breast.']},
+            'At a large serving, 200 g of vegetable cooked down, bhindi climbs to 41 and green peas to 32. Still below the fish, now level with the dals and above chicken breast.']},
     {id:5,name:'Fruits',tag:'Guava, mango and a few amla',kind:'plant',
      blurb:'A whole mango and a guava both reach 22 per serving. Amla is eaten one or two at a time, 15 kcal, so its excellent per-calorie score shrinks to 5.'},
     {id:6,name:'Eggs & meat',tag:'Two eggs is a very good deal',kind:'animal',
@@ -293,15 +293,15 @@
      blurb:'Chicken liver scores 65 and goat liver 60 from a small 60 kcal portion. Nothing else delivers this much from this few calories.'},
     {id:9,name:'Leafy greens',tag:['Back into the pack','Back near the top'],kind:'plant',
      blurb:['A katori of cooked palak is 25 kcal and scores 31. Amaranth 35. Still good, and underrated here because their per-100 kcal scores are capped. But no longer off the top of the chart.',
-            'A real katori of cooked palak is about 250 g raw and 58 kcal. That puts palak at 71, level with lean goat and above eggs and liver. Amaranth and methi follow. And this is still a floor, because the cap is applied at 100 kcal.']},
+            'A large serving of cooked palak is about 250 g raw and 58 kcal. That puts palak at 71, level with lean goat and above eggs and liver. Amaranth and methi follow. And this is still a floor, because the cap is applied at 100 kcal.']},
     {id:'win',name:'The winners',tag:['Mathi and soya chunks','Mathi and palak'],kind:'win',
      blurb:['One animal, one plant. Mathi is the best serving on the chart by a distance. Soya chunks are the best plant serving, ahead of every green and every dal.',
-            'One animal, one plant. Mathi still leads by a distance. Give the greens a real katori and the plant winner is palak again, at 71.']}
+            'One animal, one plant. Mathi still leads by a distance. Give the greens a large serving and the plant winner is palak again, at 71.']}
   ];
   var CATNAME={};CATS.forEach(function(c){if(typeof c.id==='number')CATNAME[c.id]=c.name;});
   function pick(v){return Array.isArray(v)?v[mode]:v;}
 
-  // name, protein g/100kcal, score/100kcal, animal?, small-katori kcal, category, placement A, realistic kcal (optional), placement B (optional)
+  // name, protein g/100kcal, score/100kcal, animal?, small-serving kcal, category, placement A, large-serving kcal (optional), placement B (optional)
   var B=[
     ["White rice",2.2,12,0,210,0,["r"]],
     ["Whole wheat atta",3.8,26,0,205,0,["r"]],
@@ -435,7 +435,7 @@
 
   /* ---------- mode switch ---------- */
   var NOTES=['Vegetables and greens at roughly 100 g raw: the serving sizes that sized the dots on the per-100 kcal chart.',
-             'Vegetables at about 200 g raw, palak and amaranth at 250 g, methi 120 g, cooked down to a katori. Eleven foods move; nothing else changes.'];
+             'Vegetables at about 200 g raw, palak and amaranth at 250 g, methi 120 g, cooked down. Eleven foods move; nothing else changes.'];
   function setMode(m){
     mode=m;P=m?PB:PA;
     document.getElementById('mA').setAttribute('aria-pressed',String(m===0));
@@ -505,7 +505,7 @@
   var tip=document.getElementById('tip'),sv=document.getElementById('sv');
   function showTip(i){
     var p=P[i],a=PA[i],b=PB[i];
-    var other=(p[8]||(mode===0&&b[8]))?'<div class="r dim"><span>'+(mode?'Small katori':'Realistic katori')+'</span><b>'+Math.round(mode?a[2]:b[2])+'</b></div>':'';
+    var other=(p[8]||(mode===0&&b[8]))?'<div class="r dim"><span>'+(mode?'Small serving':'Large serving')+'</span><b>'+Math.round(mode?a[2]:b[2])+'</b></div>':'';
     tip.innerHTML='<div class="c">'+CATNAME[p[5]]+' &middot; '+(p[3]?'animal':'plant')+'</div><div class="n">'+p[0]+'</div>'+
       '<div class="r"><span>Serving score</span><b>'+Math.round(p[2])+'</b></div>'+
       '<div class="r"><span>Protein /serving</span><b>'+p[1]+' g</b></div>'+
