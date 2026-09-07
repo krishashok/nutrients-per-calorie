@@ -172,6 +172,17 @@
   }
   .variant{display:inline-block;font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;border:2px solid var(--ink);padding:5px 10px;margin-bottom:18px}
   .tip .r.dim{opacity:.6}
+  .pt{transition:opacity .35s,transform .7s cubic-bezier(.4,0,.2,1)}
+  .modebar{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px;margin-bottom:14px}
+  .modebar .k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--smoke)}
+  .seg{display:inline-flex;border:2px solid var(--ink)}
+  .seg button{appearance:none;border:none;background:transparent;color:var(--ink);cursor:pointer;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;line-height:1}
+  .seg button+button{border-left:2px solid var(--ink)}
+  .seg button[aria-pressed="true"]{background:var(--turmeric);color:var(--ink)}
+  .seg button:focus-visible{outline:3px solid var(--turmeric);outline-offset:2px}
+  .modenote{font-family:var(--mono);font-size:12px;color:var(--smoke);letter-spacing:.02em;line-height:1.5;flex:1 1 260px;min-width:0}
+  .row .d{font-family:var(--mono);font-size:10px;color:var(--cardamom);letter-spacing:.04em;margin-left:6px}
+  @media (prefers-reduced-motion:reduce){.pt{transition:none}}
 </style>
 
 <div class="page">
@@ -191,6 +202,14 @@
 
   <div class="main">
     <div>
+      <div class="modebar">
+        <span class="k">Vegetable &amp; greens serving</span>
+        <div class="seg" role="group" aria-label="Serving size assumption">
+          <button type="button" id="mA" aria-pressed="true">Small katori</button>
+          <button type="button" id="mB" aria-pressed="false">Realistic katori</button>
+        </div>
+        <div class="modenote" id="modenote"></div>
+      </div>
       <div class="chart-wrap" id="cv">
         <div class="tip" id="tip" role="status" aria-live="polite"></div>
       </div>
@@ -209,26 +228,26 @@
     <div class="note">
       <div class="k">The method</div>
       <h3>The 100 kcal score, <em>scaled to the plate</em></h3>
-      <p>Each food's per-100 kcal score is multiplied by the calories in a practical serving, then the whole chart is rescaled so the best serving, a piece of mathi, reads 100. Protein is counted the same way, in grams per serving.</p>
+      <p>Each food's per-100 kcal score is multiplied by the calories in a practical serving, then the whole chart is rescaled so the best serving, a piece of mathi, reads 100. Protein is counted the same way, in grams per serving. Mathi's serving is the same under both switches, so scores are comparable across them.</p>
+    </div>
+    <div class="note">
+      <div class="k">The switch</div>
+      <h3>Two ideas of <em>a katori</em></h3>
+      <p>Small katori uses the serving sizes that sized the dots on the per-100 kcal chart: roughly 100 g of raw vegetable or greens. Realistic katori uses what a sabzi portion actually holds once cooked down: about 200 g of raw vegetable, 250 g of raw palak or amaranth, 120 g of methi. Meat, fish, dals, dairy and fruit do not change, because those servings were already realistic.</p>
     </div>
     <div class="note">
       <div class="k">The catch</div>
-      <h3>Leafy greens are <em>underrated here</em></h3>
-      <p>Palak and amaranth hit the cap on several nutrients at 100 kcal, so their true per-100 kcal score is higher than 330. Scaling a capped number down to a 25 kcal serving shortchanges them. Treat their dots as a floor, not a verdict.</p>
-    </div>
-    <div class="note">
-      <div class="k">What moves</div>
-      <h3>Fish, goat and eggs <em>climb the chart</em></h3>
-      <p>Per serving, mathi, bangda and lean goat lead, chicken liver and eggs follow, and the greens fall back into the pack with the dals. Chicken thigh and breast swing far right on protein, but stay low on everything else.</p>
+      <h3>Greens are still <em>a floor</em></h3>
+      <p>Palak and amaranth hit the cap on several nutrients at 100 kcal, so their true per-100 kcal score is higher than 330. Scaling a capped number down to a small serving shortchanges them under both switches. Their dots are a floor, not a verdict.</p>
     </div>
   </div>
 
   <div class="verdict">
     <div>
       <div class="k">Eat like a human</div>
-      <div class="v">The leaderboard <em>changes</em> when the portion is real.</div>
+      <div class="v">Half the gap is <em>the size of the katori</em>.</div>
     </div>
-    <p>Small oily fish and eggs are the practical stars. Palak is still superb per calorie. You just cannot eat half a kilo of it, and this chart stops pretending you can.</p>
+    <p>At a small katori, animal foods own the top of the chart. Give the greens a real portion and palak sits level with lean goat, above eggs and liver. Mathi leads either way. The plate still wants both.</p>
   </div>
 
   <footer>
@@ -251,17 +270,19 @@
 
   var CATS=[
     {id:'all',name:'Everything',tag:'The whole Indian kitchen, plated',kind:'mix',
-     blurb:'Forty-nine common ingredients, scored by what one realistic serving delivers. Hover any mark, or pick a category to read the labels.'},
+     blurb:['Forty-nine common ingredients, scored by what one realistic serving delivers. Hover any mark, or pick a category to read the labels.',
+            'Same foods, with vegetables and greens at a realistic katori: about 200 g of raw vegetable or 250 g of raw greens, cooked down. Everything else is unchanged.']},
     {id:0,name:'Staples',tag:'A full plate of calories',kind:'plant',
      blurb:'A plate of rice is 210 kcal and still scores under 10. Millets do better, but the whole category stays in the bottom left. Its job is calories.'},
     {id:1,name:'Dals & legumes',tag:'A katori each',kind:'plant',
-     blurb:'One katori of any dal lands between 20 and 32 with 6 to 8 g of protein. Soya chunks lead the plants outright: 39 and nearly 13 g of protein from an 85 kcal serving.'},
+     blurb:'One katori of any dal lands between 20 and 32 with 6 to 8 g of protein. Soya chunks lead the dals outright: 39 and nearly 13 g of protein from an 85 kcal serving.'},
     {id:2,name:'Nuts & seeds',tag:'Small handfuls',kind:'plant',
      blurb:'A handful of peanuts is 170 kcal, which buys a respectable 20 and 8 g of protein. Til and flax are eaten by the spoon, so they barely register per serving.'},
     {id:3,name:'Dairy & ghee',tag:'Ghee still scores nothing',kind:'animal',
      blurb:'A glass of milk and a portion of paneer both land in the low twenties. Low-fat paneer keeps the protein and sheds the calories. Ghee is a tablespoon of 1.7.'},
-    {id:4,name:'Vegetables',tag:'The century-makers come back to earth',kind:'plant',
-     blurb:'Bhindi scored 166 per 100 kcal. A 33 kcal serving of it scores 20. Vegetables are still worth eating, but per plate they sit alongside the dals, not above them.'},
+    {id:4,name:'Vegetables',tag:['The century-makers come back to earth','A proper katori restores half the damage'],kind:'plant',
+     blurb:['Bhindi scored 166 per 100 kcal. A 33 kcal serving of it scores 20. Vegetables are still worth eating, but per plate they sit alongside the dals, not above them.',
+            'At a proper katori, 200 g of vegetable cooked down, bhindi climbs to 41 and green peas to 32. Still below the fish, now level with the dals and above chicken breast.']},
     {id:5,name:'Fruits',tag:'Guava, mango and a few amla',kind:'plant',
      blurb:'A whole mango and a guava both reach 22 per serving. Amla is eaten one or two at a time, 15 kcal, so its excellent per-calorie score shrinks to 5.'},
     {id:6,name:'Eggs & meat',tag:'Two eggs is a very good deal',kind:'animal',
@@ -270,14 +291,17 @@
      blurb:'A 120 kcal piece of mathi is the best serving on the chart, so it defines 100. Bangda scores 76. Nethili is eaten in small portions, which pulls it down to 46.'},
     {id:8,name:'Organ meats',tag:'A 60 kcal portion, 65 points',kind:'animal',
      blurb:'Chicken liver scores 65 and goat liver 60 from a small 60 kcal portion. Nothing else delivers this much from this few calories.'},
-    {id:9,name:'Leafy greens',tag:'Back into the pack',kind:'plant',
-     blurb:'A katori of cooked palak is 25 kcal and scores 31. Amaranth 35. Still good, and underrated here because their per-100 kcal scores are capped. But no longer off the top of the chart.'},
-    {id:'win',name:'The winners',tag:'Mathi and soya chunks',kind:'win',
-     blurb:'One animal, one plant. Mathi is the best serving on the chart by a distance. Soya chunks are the best plant serving, ahead of every green and every dal.'}
+    {id:9,name:'Leafy greens',tag:['Back into the pack','Back near the top'],kind:'plant',
+     blurb:['A katori of cooked palak is 25 kcal and scores 31. Amaranth 35. Still good, and underrated here because their per-100 kcal scores are capped. But no longer off the top of the chart.',
+            'A real katori of cooked palak is about 250 g raw and 58 kcal. That puts palak at 71, level with lean goat and above eggs and liver. Amaranth and methi follow. And this is still a floor, because the cap is applied at 100 kcal.']},
+    {id:'win',name:'The winners',tag:['Mathi and soya chunks','Mathi and palak'],kind:'win',
+     blurb:['One animal, one plant. Mathi is the best serving on the chart by a distance. Soya chunks are the best plant serving, ahead of every green and every dal.',
+            'One animal, one plant. Mathi still leads by a distance. Give the greens a real katori and the plant winner is palak again, at 71.']}
   ];
   var CATNAME={};CATS.forEach(function(c){if(typeof c.id==='number')CATNAME[c.id]=c.name;});
+  function pick(v){return Array.isArray(v)?v[mode]:v;}
 
-  // name, protein g/100kcal, score/100kcal, animal?, kcal per serving, category, label placement (in serving coordinates)
+  // name, protein g/100kcal, score/100kcal, animal?, small-katori kcal, category, placement A, realistic kcal (optional), placement B (optional)
   var B=[
     ["White rice",2.2,12,0,210,0,["r"]],
     ["Whole wheat atta",3.8,26,0,205,0,["r"]],
@@ -299,13 +323,13 @@
     ["Whole milk",4.6,48,1,130,3,["l"]],
     ["Curd",5.0,64,1,60,3,["r"]],
     ["Low-fat paneer",13,68,1,85,3,["r"]],
-    ["Tomato",4.5,134,0,20,4,["L",6,8.5]],
-    ["Cabbage",6.4,144,0,20,4,["L",6,12]],
-    ["Cauliflower",8,156,0,30,4,["L",6,22.5]],
-    ["Bhindi",6.2,166,0,33,4,["L",6,26]],
-    ["Karela",5,182,0,20,4,["L",6,15.5]],
-    ["Green peas",7.8,108,0,40,4,["L",6,19]],
-    ["Mushroom",9.2,90,0,25,4,["L",6,5]],
+    ["Tomato",4.5,134,0,20,4,["L",6,8.5],36,["L",8,16]],
+    ["Cabbage",6.4,144,0,20,4,["L",6,12],50,["L",8,24]],
+    ["Cauliflower",8,156,0,30,4,["L",6,22.5],50,["L",8,28]],
+    ["Bhindi",6.2,166,0,33,4,["L",6,26],66,["r"]],
+    ["Karela",5,182,0,20,4,["L",6,15.5],34,["L",8,20]],
+    ["Green peas",7.8,108,0,40,4,["L",6,19],80,["r"]],
+    ["Mushroom",9.2,90,0,25,4,["L",6,5],44,["L",8,12]],
     ["Amla",1.7,95,0,15,5,["L",5,4]],
     ["Guava",3.6,88,0,68,5,["L",5,26]],
     ["Muskmelon",2.5,78,0,60,5,["L",5,17]],
@@ -325,18 +349,24 @@
     ["Chicken liver",15.5,292,1,60,8,["r"]],
     ["Goat liver",14.8,270,1,60,8,["l"]],
     ["Curry leaves",6.2,246,0,3,9,["r"]],
-    ["Methi leaves",9,270,0,25,9,["L",6,27]],
-    ["Moringa leaves",9.5,300,0,20,9,["L",6,22]],
-    ["Amaranth leaves",12,312,0,30,9,["r"]],
-    ["Palak",16,330,0,25,9,["r"]]
+    ["Methi leaves",9,270,0,25,9,["L",6,27],60,["L",10,56]],
+    ["Moringa leaves",9.5,300,0,20,9,["L",6,22],32,["r"]],
+    ["Amaranth leaves",12,312,0,30,9,["r"],58,["L",10,63]],
+    ["Palak",16,330,0,25,9,["r"],58,["r"]]
   ];
   var MAXRAW=0;
   B.forEach(function(b){MAXRAW=Math.max(MAXRAW,b[2]*b[4]/100);});
-  // P: name, protein g/serving, serving score 0-100, animal?, kcal/serving, category, placement, score/100kcal
-  var P=B.map(function(b){
-    return [b[0],Math.round(b[1]*b[4]/10)/10,Math.round(b[2]*b[4]/100/MAXRAW*1000)/10,b[3],b[4],b[5],b[6],b[2]];
-  });
-  var WIN={"Mathi (sardine)":1,"Soya chunks":1};
+  function build(m){
+    return B.map(function(b){
+      var k=(m===1&&b[7])?b[7]:b[4], pl=(m===1&&b[8])?b[8]:b[6];
+      // name, protein g/serving, serving score, animal?, kcal/serving, category, placement, score/100kcal, changed?
+      return [b[0],Math.round(b[1]*k/10)/10,Math.round(b[2]*k/100/MAXRAW*1000)/10,b[3],k,b[5],pl,b[2],!!(m===1&&b[7])];
+    });
+  }
+  var PA=build(0),PB=build(1),mode=0,P=PA;
+  var WINS=[{"Mathi (sardine)":1,"Soya chunks":1},{"Mathi (sardine)":1,"Palak":1}];
+  var RINGABLE={};Object.keys(WINS[0]).concat(Object.keys(WINS[1])).forEach(function(n){RINGABLE[n]=1;});
+  function WIN(n){return !!WINS[mode][n];}
 
   /* ---------- chart ---------- */
   var s='<svg id="sv" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Nutrient score per serving versus grams of protein per serving for common Indian foods">';
@@ -353,28 +383,44 @@
   s+='<text class="axt" x="'+(W-mr)+'" y="'+(H-8)+'" text-anchor="end">Protein, g per serving &#8594;</text>';
   s+='<text class="axt" x="'+(ml-40)+'" y="'+(mt-16)+'" text-anchor="start">&#8593; Nutrient score per serving (mathi = 100)</text>';
 
-  var marks='',labels='';
-  P.forEach(function(p,i){
+  var marks='';
+  PA.forEach(function(p,i){
     var cx=X(p[1]),cy=Y(p[2]),c=p[3]?ANIMAL:PLANT,r=RR;
-    var g='<g class="pt" id="pt'+i+'" data-i="'+i+'" tabindex="0" role="img" aria-label="'+p[0]+', serving score '+p[2]+', '+p[1]+' g protein per serving">';
-    if(WIN[p[0]])g+='<circle class="ring" id="ring'+i+'" cx="'+cx+'" cy="'+cy+'" r="'+(r+7)+'" fill="none" stroke="'+GOLD+'" stroke-width="3.5" style="opacity:0"/>';
+    var g='<g class="pt" id="pt'+i+'" data-i="'+i+'" tabindex="0" role="img" aria-label="'+p[0]+'">';
+    if(RINGABLE[p[0]])g+='<circle class="ring" id="ring'+i+'" cx="'+cx+'" cy="'+cy+'" r="'+(r+7)+'" fill="none" stroke="'+GOLD+'" stroke-width="3.5" style="opacity:0"/>';
     if(p[3]){var sd=r*1.77;g+='<rect class="mk" x="'+(cx-sd/2)+'" y="'+(cy-sd/2)+'" width="'+sd+'" height="'+sd+'" rx="2.5" fill="'+c+'" stroke="#F3E9D2" stroke-width="1.5"/>';}
     else{g+='<circle class="mk" cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+c+'" stroke="#F3E9D2" stroke-width="1.5"/>';}
     g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(r+5)+'" fill="transparent" stroke="none"/>';
     g+='</g>';
     marks+=g;
-    var L=p[6],lx,ly,an,lead='';
-    if(L[0]==='L'){lx=X(L[1]);ly=Y(L[2])+4;an='start';
-      lead='<line x1="'+(cx+r+2)+'" y1="'+cy+'" x2="'+(lx-5)+'" y2="'+(ly-4)+'" stroke="rgba(22,19,15,.45)" stroke-width="1"/>';}
-    else if(L[0]==='r'){lx=cx+r+7;ly=cy+4;an='start';}
-    else if(L[0]==='l'){lx=cx-r-7;ly=cy+4;an='end';}
-    else if(L[0]==='t'){lx=cx;ly=cy-r-8;an='middle';}
-    else{lx=cx;ly=cy+r+14;an='middle';}
-    labels+='<g class="lb" id="lb'+i+'" style="opacity:0">'+lead+'<text class="lbl'+(WIN[p[0]]?' win':'')+'" x="'+lx+'" y="'+ly+'" text-anchor="'+an+'">'+p[0]+'</text></g>';
   });
-  s+=marks+labels+'</svg>';
+  s+=marks+'<g id="labels"></g></svg>';
   var cv=document.getElementById('cv');
   cv.insertAdjacentHTML('afterbegin',s);
+  var labelsG=document.getElementById('labels');
+
+  function buildLabels(){
+    var out='';
+    P.forEach(function(p,i){
+      var cx=X(p[1]),cy=Y(p[2]),r=RR,L=p[6],lx,ly,an,lead='';
+      if(L[0]==='L'){lx=X(L[1]);ly=Y(L[2])+4;an='start';
+        lead='<line x1="'+(cx+r+2)+'" y1="'+cy+'" x2="'+(lx-5)+'" y2="'+(ly-4)+'" stroke="rgba(22,19,15,.45)" stroke-width="1"/>';}
+      else if(L[0]==='r'){lx=cx+r+7;ly=cy+4;an='start';}
+      else if(L[0]==='l'){lx=cx-r-7;ly=cy+4;an='end';}
+      else if(L[0]==='t'){lx=cx;ly=cy-r-8;an='middle';}
+      else{lx=cx;ly=cy+r+14;an='middle';}
+      out+='<g class="lb" id="lb'+i+'" style="opacity:0">'+lead+'<text class="lbl'+(WIN(p[0])?' win':'')+'" x="'+lx+'" y="'+ly+'" text-anchor="'+an+'">'+p[0]+'</text></g>';
+    });
+    labelsG.innerHTML=out;
+  }
+  function positionMarks(){
+    P.forEach(function(p,i){
+      var a=PA[i],dx=X(p[1])-X(a[1]),dy=Y(p[2])-Y(a[2]);
+      var pt=document.getElementById('pt'+i);
+      pt.style.transform='translate('+dx+'px,'+dy+'px)';
+      pt.setAttribute('aria-label',p[0]+', serving score '+Math.round(p[2])+', '+p[1]+' g protein per serving');
+    });
+  }
 
   /* ---------- chips ---------- */
   var chips=document.getElementById('chips');
@@ -387,25 +433,41 @@
     chips.appendChild(b);
   });
 
+  /* ---------- mode switch ---------- */
+  var NOTES=['Vegetables and greens at roughly 100 g raw: the serving sizes that sized the dots on the per-100 kcal chart.',
+             'Vegetables at about 200 g raw, palak and amaranth at 250 g, methi 120 g, cooked down to a katori. Eleven foods move; nothing else changes.'];
+  function setMode(m){
+    mode=m;P=m?PB:PA;
+    document.getElementById('mA').setAttribute('aria-pressed',String(m===0));
+    document.getElementById('mB').setAttribute('aria-pressed',String(m===1));
+    document.getElementById('modenote').textContent=NOTES[m];
+    positionMarks();buildLabels();applyCat();renderPanel();
+    try{localStorage.setItem('mb-serving-mode',String(m));}catch(e){}
+  }
+  document.getElementById('mA').addEventListener('click',function(){setMode(0);});
+  document.getElementById('mB').addEventListener('click',function(){setMode(1);});
+
   /* ---------- state ---------- */
   var cur='all';
   var panel=document.getElementById('panel');
   function inSel(p){
     if(cur==='all')return true;
-    if(cur==='win')return !!WIN[p[0]];
+    if(cur==='win')return WIN(p[0]);
     return p[5]===cur;
+  }
+  function applyCat(){
+    P.forEach(function(p,i){
+      var pt=document.getElementById('pt'+i),lb=document.getElementById('lb'+i),rg=document.getElementById('ring'+i);
+      var on=inSel(p),w=WIN(p[0]);
+      if(cur==='all'){pt.style.opacity=0.92;lb.style.opacity=w?1:0;if(rg)rg.style.opacity=w?1:0;}
+      else if(cur==='win'){pt.style.opacity=on?1:0.14;lb.style.opacity=on?1:0;if(rg)rg.style.opacity=w?1:0;}
+      else{pt.style.opacity=on?1:0.14;lb.style.opacity=on?1:0;if(rg)rg.style.opacity=0;}
+    });
   }
   function setCat(id){
     cur=id;
     chips.querySelectorAll('.chip').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.id===String(id)));});
-    P.forEach(function(p,i){
-      var pt=document.getElementById('pt'+i),lb=document.getElementById('lb'+i),rg=document.getElementById('ring'+i);
-      var on=inSel(p);
-      if(cur==='all'){pt.style.opacity=0.92;lb.style.opacity=WIN[p[0]]?1:0;if(rg)rg.style.opacity=1;}
-      else if(cur==='win'){pt.style.opacity=on?1:0.14;lb.style.opacity=on?1:0;if(rg)rg.style.opacity=1;}
-      else{pt.style.opacity=on?1:0.14;lb.style.opacity=on?1:0;if(rg)rg.style.opacity=0;}
-    });
-    renderPanel();
+    applyCat();renderPanel();
     try{localStorage.setItem('mb-serving-cat',String(id));}catch(e){}
   }
   function renderPanel(){
@@ -415,11 +477,12 @@
     var ft='';
     if(cur==='all'){items=items.slice(0,10);ft='Top 10 of 49 by serving score. Pick a category to see the rest.';}
     var html='<div class="kicker">'+(cur==='all'?'Overview':cur==='win'?'Verdict':'Category')+'</div>';
-    html+='<h2>'+c.name+'</h2><div class="tag">'+c.tag+'</div><p class="blurb">'+c.blurb+'</p>';
+    html+='<h2>'+c.name+'</h2><div class="tag">'+pick(c.tag)+'</div><p class="blurb">'+pick(c.blurb)+'</p>';
     html+='<div class="list"><div class="hd"><span>'+(cur==='all'?'Top 10 by score':'Food')+'</span><span>Score</span><span>Prot g</span></div>';
     items.forEach(function(o){
-      var p=o.p;
-      html+='<div class="row" data-i="'+o.i+'"><div class="nm"><i class="'+(p[3]?'animal':'plant')+'"></i><span>'+p[0]+'</span>'+(cur==='all'||cur==='win'?'<small>'+CATNAME[p[5]]+'</small>':'<small>'+p[4]+' kcal</small>')+'</div>';
+      var p=o.p,a=PA[o.i];
+      var delta=p[8]?'<span class="d">was '+Math.round(a[2])+'</span>':'';
+      html+='<div class="row" data-i="'+o.i+'"><div class="nm"><i class="'+(p[3]?'animal':'plant')+'"></i><span>'+p[0]+'</span>'+(cur==='all'||cur==='win'?'<small>'+CATNAME[p[5]]+'</small>':'<small>'+p[4]+' kcal</small>')+delta+'</div>';
       html+='<div class="bar"><b style="width:'+Math.round(p[2])+'%"></b><span class="v">'+Math.round(p[2])+'</span></div><div class="p">'+p[1]+'</div></div>';
     });
     html+=(ft?'<div class="ft">'+ft+'</div>':'')+'</div>';
@@ -441,17 +504,18 @@
   /* ---------- tooltip ---------- */
   var tip=document.getElementById('tip'),sv=document.getElementById('sv');
   function showTip(i){
-    var p=P[i];
-    tip.innerHTML='<div class="c">'+CATNAME[p[5]]+' · '+(p[3]?'animal':'plant')+'</div><div class="n">'+p[0]+'</div>'+
+    var p=P[i],a=PA[i],b=PB[i];
+    var other=(p[8]||(mode===0&&b[8]))?'<div class="r dim"><span>'+(mode?'Small katori':'Realistic katori')+'</span><b>'+Math.round(mode?a[2]:b[2])+'</b></div>':'';
+    tip.innerHTML='<div class="c">'+CATNAME[p[5]]+' &middot; '+(p[3]?'animal':'plant')+'</div><div class="n">'+p[0]+'</div>'+
       '<div class="r"><span>Serving score</span><b>'+Math.round(p[2])+'</b></div>'+
       '<div class="r"><span>Protein /serving</span><b>'+p[1]+' g</b></div>'+
-      '<div class="r"><span>Serving</span><b>~'+p[4]+' kcal</b></div>'+
+      '<div class="r"><span>Serving</span><b>~'+p[4]+' kcal</b></div>'+other+
       '<div class="r dim"><span>Score /100 kcal</span><b>'+p[7]+'</b></div>';
     var rect=sv.getBoundingClientRect(),k=rect.width/W;
     var cx=X(p[1])*k,cy=(Y(p[2])-RR)*k;
     cx=Math.max(100,Math.min(rect.width-100,cx));
     tip.style.left=cx+'px';tip.style.top=cy+'px';
-    if(cy<120){tip.style.transform='translate(-50%,'+(RR*2*k+16)+'px)';}else{tip.style.transform='';}
+    if(cy<130){tip.style.transform='translate(-50%,'+(RR*2*k+16)+'px)';}else{tip.style.transform='';}
     tip.classList.add('on');
     hot(i,true);
   }
@@ -465,10 +529,10 @@
     g.addEventListener('click',function(){setCat(P[i][5]);showTip(i);});
   });
 
-  var saved=null;try{saved=localStorage.getItem('mb-serving-cat');}catch(e){}
-  var init='all';
-  if(saved!==null){var n=+saved;if(saved==='win')init='win';else if(!isNaN(n)&&saved!=='')init=n;}
-  setCat(init);
+  var saved=null,sm=null;try{saved=localStorage.getItem('mb-serving-cat');sm=localStorage.getItem('mb-serving-mode');}catch(e){}
+  if(saved!==null){var n=+saved;if(saved==='win')cur='win';else if(!isNaN(n)&&saved!=='')cur=n;}
+  chips.querySelectorAll('.chip').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.id===String(cur)));});
+  setMode(sm==='1'?1:0);
 })();
 </script>
 </body>
